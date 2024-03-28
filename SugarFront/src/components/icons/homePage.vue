@@ -75,10 +75,14 @@
         <div class="total">
             <h1>Total Sugar From Item of List</h1>
             <p>The sugar from the items in the list is equal to: </p>
+        <div id="cup-with-pointer">
             <div class="visual-aid">
-            <img class="cup" src="../../assets/img/Copa.png" alt="measuring cup">
-            <img class="pointer" src="../../assets/img/pointer.png" alt="pointer">
+                <img class="cup" src="../../assets/img/Copa.png" alt="measuring cup">
             </div>
+            <div class="scrollbox">           
+                <img class="pointer" src="../../assets/img/pointer.png" alt="pointer" :style="{ paddingBottom: scrollValue + 'px'}">
+            </div>
+        </div>
             <h1>Percentage of daily limit</h1>
             <p></p>
         </div>
@@ -116,8 +120,7 @@ export default {
                 }
             ],
             nextListId: 2,
-            scrollValue: 0,
-            maxScrollValue: 200,
+            maxScrollValue: 160,
             
 
         };
@@ -132,6 +135,14 @@ export default {
             });
             return total;
         },
+
+        scrollValue() {
+            let val = (this.totalSugars % 200)
+            return val/2;
+        },
+        extraCups() {
+            return Math.floor(this.totalSugars / 200);
+        }
 
     },
 
@@ -315,18 +326,40 @@ h2 {
     width: 60%;
 }
 .visual-aid {
-    
+    min-height: 200px;
+    max-height: 200px;
+    height: 200px;
+    width: 50%;
+    position: relative;
 }
 
 .cup {
-    width: 175px;
+    width: 100%;
+    height: 100%;
     transform: scale(-1, 1);
 }
 
 .pointer {
-    width: 50px;
+    width: 30px;
+    height: 30px;
+
 }
 
+.scrollbox {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    min-height: 200px;
+    max-height: 200px;
+    width: 50%;
+    overflow: hidden;
+}
+
+#cup-with-pointer {
+    display: flex;
+    min-height: 200px;
+    max-height: 200px;
+}
 form {
     background-color: #dbe9e9;
 }
