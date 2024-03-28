@@ -1,10 +1,9 @@
 <template>
-<div class="container">
+<div class="body-bag">
+    <div class="container">
       
       <div class="title-card">
         <h1>How Much Sugar Is In Your Favorite Fast Food Items?</h1>
-        
-        <button>Calculate!</button>
         
       </div>
       <div class="searchbox">
@@ -35,61 +34,92 @@
           <div class="addbutton">+</div>
         </div>
       </div>
+  <div class="section-two">
   <div class="custom">
     <h2> Add a Custom Item </h2>
+    <form v-on:submit.prevent="saveNewItem">
       <div>
         <label for="name">Name: </label>
-        <input id ="name" type="text" name="name" placeholder="Add Food Name Here!" required>
+        <input id ="name" type="text" name="name" placeholder="Add Food Name Here!" required v-model="newItem.name">
       </div>
       <div>
         <label for="sugars">Grams of Sugar: </label>
-        <input id="sugars" type="number" name="sugars" placeholder="0" min="0" required>
+        <input id="sugars" type="number" name="sugars" placeholder="0" min="0" required v-model="newItem.sugar">
       </div>
         <button type="submit" id="submitter">Add To List</button>
+    </form>
   </div> 
-  <div class="list-to-math"> <!-- come back to create template-->
+  
+  
+  <div class="list-to-math" > <!-- come back to create template-->
         <h2>List of Items</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Food Name</th>
-              <th>Sugar</th>
-              <th>Remove Item</th>
-            </tr>
-          </thead>
-          <tbody id="table-body">
-          </tbody>
-        </table> 
-        <template id="row-template">
-            <tr> 
-              <th class="food-name">Click the "Remove Item" box to close!</th>
-              <td class="sugar-in-grams">0g</td>
-              <td class="removebutton">Remove</td>
-            </tr>
-        </template>
-      </div>
+        <div class="hateful-div">
+          <div class="item-header">
+                <p>Food Name</p>
+                <p>Sugar</p>
+                <button @click="removeAllItems()">Remove All Items</button>
+          </div >
+            <div class="row-template" v-for="item in listOfItems" v-bind:key="item.id">    
+                <span>{{ item.name }}</span>
+                <span>{{ gramOrGrams(item.sugar) }}</span>
+                <span><button @click="removeItemFromList(item.id)">Remove</button></span>
+            </div>       
+        </div>
+    </div>
       <div class="info">
-       
-      <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-         Dolorem cupiditate blanditiis praesentium quibusdam vel laborum 
-         alias dicta beatae amet ratione ipsum nihil distinctio, maxime commodi, 
-         possimus, odit cum culpa omnis.
-      </p>
+      
       </div>
     </div>
+    </div>
+    <div class="information-area">
+        <div class="total">
+            <h1>Total Sugar From Item of List</h1>
+            <p>The sugar from the items in the list is equal to: </p>
+            <div class="visual-aid">
+            <img class="cup" src="../../assets/img/Copa.png" alt="measuring cup">
+            <img class="pointer" src="../../assets/img/pointer.png" alt="pointer">
+            </div>
+            <h1>Percentage of daily limit</h1>
+            <p></p>
+        </div>
+    </div>
+</div>
 </template>
-
 <script>
 export default {
     data() {
         return {
             searchBox: '',
-            addName: '',
-            addSugars: '',
-            listOfItems: [],
+            listOfItems: [
+                {
+                    id: 0,
+                    name: 'Mcdonalds Milkshake WOO',
+                    sugar: 3
+                },
+                {
+                    id: 1,
+                    name: 'squeeeeeeeeeee',
+                    sugar: 10
+                }, 
+                
+            ],
+            searchItems: [
+                {   
+                    name: 'foo',
+                    sugar: 0
+                }
+            ],
+            newItem: [
+                {
+                    name: '',
+                    sugar: 0
+                }
+            ],
+            nextListId: 2,
+            scrollValue: 0,
+            maxScrollValue: 200
 
-        },
+        };
     },
 
     computed: {
@@ -97,6 +127,35 @@ export default {
     },
 
     methods: {
+        gramOrGrams(numba) {
+            if (numba === 1) {
+                return numba + ' gram of sugar'
+            }
+            return numba + ' grams of sugar'
+        },
+        saveNewItem() {
+            this.newItem.id = this.getNextListId();
+            this.listOfItems.unshift(this.newItem);
+
+            this.newItem = {
+                name: '',
+                sugar: 0
+            }            
+        },
+        getNextListId() {
+            let steve = this.nextListId;
+
+            this.nextListId += 1;
+            return steve;
+        },
+        removeItemFromList(id) {
+            let removed = this.listOfItems.find((item) => item.id === id);
+
+            this.listOfItems.splice(this.listOfItems.indexOf(removed), 1);
+        },
+        removeAllItems() {
+            this.listOfItems = [];
+        }
 
 
     }
@@ -109,7 +168,7 @@ body {
     background-color: #008080;
 }
 .container {
-    margin: auto;
+    margin-left: 2%;
     width: fit-content;
 }
 .header {
@@ -129,7 +188,6 @@ body {
     border-radius: 5px;
 }
 .header > a {
-    background: url(img/gill.jpg) no-repeat;
     max-width: 100px;
     max-height: 100px;
     font-size: 20px;
@@ -156,31 +214,31 @@ body {
 }
 
 
-
-table {
+.item-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
     background-color: #ffffff;
-    border-collapse: collapse;
     width: 100%;
-}
-
-tr:nth-child(even) {
-    background-color: #bbc5c5;
-}
-
-td:last-child:hover {
-    background-color: #ff0303bd;
-    font-weight: 900;
-    cursor: pointer;
-}
-
-th, td {
-    border-right: 2px solid #808080;
     border-bottom: 2px solid #808080;
-    text-align: right;
-    padding: 2rem;
 }
-th {
-    text-align: center;
+
+.row-template {
+    display: flex;
+    background-color: #ffffff;
+}
+
+.row-template > span {
+    padding-top: 5%;
+    min-height: 75px;
+    max-height: 75px;
+    min-width: 125px;
+    max-width: 125px;
+    margin: auto;
+}
+
+.row-template:nth-child(odd){
+    background-color: #bdb8b8;
 }
 
 .title-card button {
@@ -201,6 +259,8 @@ th {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     border-right: 1px solid #808080;
+    overflow-y:scroll;
+    max-height: 800px;
 
 }
 
@@ -225,5 +285,40 @@ h2 {
     font-weight: 900;
     font-size: 3rem;
     cursor: pointer;
+}
+
+.hateful-div {
+    width: 100%;
+    margin: auto;
+}
+.body-bag {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.information-area {
+    background-color: #bdb8b8;
+    margin-left: 2%;
+    margin-right: 2%;
+    height: auto;
+    width: 60%;
+}
+.visual-aid {
+    
+}
+
+.cup {
+    width: 175px;
+    transform: scale(-1, 1);
+}
+
+.pointer {
+    width: 50px;
+}
+
+form {
+    background-color: #dbe9e9;
 }
 </style>
