@@ -117,12 +117,21 @@ export default {
             ],
             nextListId: 2,
             scrollValue: 0,
-            maxScrollValue: 200
+            maxScrollValue: 200,
+            
 
         };
     },
 
     computed: {
+
+        totalSugars() {
+            let total = 0;
+            this.listOfItems.forEach(element => {
+                total += element.sugar;
+            });
+            return total;
+        },
 
     },
 
