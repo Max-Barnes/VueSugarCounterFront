@@ -71,7 +71,7 @@
     <div class="information-area">
       <div class="total">
         <h1>Total Sugar From Item of List</h1>
-        <h3>The sugar from the items in the list is equal to: {{ howManyCups }}</h3>
+        <h3>{{ totalSugars }}g of sugar is equal to: {{ howManyCups }}</h3>
         <div id="cup-with-pointer">
           <div class="visual-aid">
             <img class="cup" src="../../assets/img/Copa.png" alt="measuring cup" />
@@ -98,11 +98,14 @@
           {{ totalSugars }}g of sugar is {{ percentOfDailyLimit }} of the recommended daily limit
           (30g)
         </h1>
-        <div class="funny-section">
+        <div>
           <h1>
-            After a year eating the items in the list daily you would have eaten
-            {{ totalSugars * 365 }}g of sugar this year
+            This would be equivalent to {{ numberOfCubes }} sugar cubes/packets
           </h1>
+          <div class="cubes">
+            <img :key="index" src="../../assets/img/cube.png" alt="sugar-cube" v-for="index in Math.floor(numberOfCubes)">
+          </div>
+
         </div>
       </div>
     </div>
@@ -187,7 +190,7 @@ export default {
       return daily.toFixed(2) + '%'
     },
     numberOfCubes() {
-      return Math.floor(this.totalSugars / this.sugarInCube)
+      return (this.totalSugars / this.sugarInCube).toFixed(2)
     },
     didYouEatTheCar() {
       if (this.percentOfCar >= 1) {
@@ -416,5 +419,11 @@ h3 {
 }
 h1 {
   font-size: 3rem;
+}
+.cubes > img {
+  height: 100px;
+  width: 100px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 </style>
