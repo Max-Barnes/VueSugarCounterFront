@@ -10,24 +10,10 @@
         </div>
       </div>
       <div class="searchitems">
-        <div class="item">
+        <div class="item" v-for="each in searchItems" :key="each.id">
           <div class="iteminfo">
-            <div class="name">Hope's McChicken</div>
-            <div class="sugar">6g of sugar</div>
-          </div>
-          <div class="addbutton">+</div>
-        </div>
-        <div class="item">
-          <div class="iteminfo">
-            <div class="name">McDonald's McChicken</div>
-            <div class="sugar">6g of sugar</div>
-          </div>
-          <div class="addbutton">+</div>
-        </div>
-        <div class="item">
-          <div class="iteminfo">
-            <div class="name">McDonald's McChicken</div>
-            <div class="sugar">6g of sugar</div>
+            <div class="name">{{ each.name }}</div>
+            <div class="sugar">{{ each.sugar }}g of sugar</div>
           </div>
           <div class="addbutton">+</div>
         </div>
@@ -85,7 +71,7 @@
     <div class="information-area">
       <div class="total">
         <h1>Total Sugar From Item of List</h1>
-        <p>The sugar from the items in the list is equal to:</p>
+        <h3>The sugar from the items in the list is equal to: {{ howManyCups }}</h3>
         <div id="cup-with-pointer">
           <div class="visual-aid">
             <img class="cup" src="../../assets/img/Copa.png" alt="measuring cup" />
@@ -98,10 +84,26 @@
               :style="{ paddingBottom: scrollValue + 'px' }"
             />
           </div>
+          <div class="extra-cups">
+            <img
+              :key="index"
+              src="../../assets/img/copa.png"
+              alt="additional-cup"
+              v-for="index in extraCups"
+            />
+          </div>
         </div>
 
-        <h1>Percentage of daily limit</h1>
-        <p></p>
+        <h1>
+          {{ totalSugars }}g of sugar is {{ percentOfDailyLimit }} of the recommended daily limit
+          (30g)
+        </h1>
+        <div class="funny-section">
+          <h1>
+            After a year eating the items in the list daily you would have eaten
+            {{ totalSugars * 365 }}g of sugar this year
+          </h1>
+        </div>
       </div>
     </div>
   </div>
@@ -125,6 +127,7 @@ export default {
       ],
       searchItems: [
         {
+          id: 0,
           name: 'foo',
           sugar: 0
         }
@@ -136,7 +139,21 @@ export default {
         }
       ],
       nextListId: 2,
-      maxScrollValue: 160
+      maxScrollValue: 160,
+      funnyStuff: [
+        {
+          id: 1,
+          name: 'Car',
+          sugar: 100000
+        },
+        {
+          id: 2,
+          name: 'Sugar Cube',
+          sugar: 4
+        }
+      ],
+      sugarInCar: 100000,
+      sugarInCube: 4
     }
   },
 
@@ -155,6 +172,28 @@ export default {
     },
     extraCups() {
       return Math.floor(this.totalSugars / 200)
+    },
+    howManyCups() {
+      return this.totalSugars / 200 + ' cups of sugar'
+    },
+    percentOfDailyLimit() {
+      let daily = (this.totalSugars / 30) * 100
+
+      return daily.toFixed(2) + '%'
+    },
+    percentOfCar() {
+      let daily = (this.totalSugars * 365) / this.sugarInCar
+
+      return daily.toFixed(2) + '%'
+    },
+    numberOfCubes() {
+      return Math.floor(this.totalSugars / this.sugarInCube)
+    },
+    didYouEatTheCar() {
+      if (this.percentOfCar >= 1) {
+        return "You would've eaten a car made of sugar this year!"
+      }
+      return 'You would not have eaten a car made of sugar this year!'
     }
   },
 
@@ -283,12 +322,12 @@ body {
 .searchitems {
   background-color: #dbe9e9;
   border-radius: 4px;
-  min-height: 500px;
+  min-height: 400px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   border-right: 1px solid #808080;
   overflow-y: scroll;
-  max-height: 600px;
+  max-height: 400px;
 }
 
 .item {
@@ -296,6 +335,7 @@ body {
   justify-content: space-around;
   align-items: center;
   border: 1px solid #808080;
+  max-height: 100px;
 }
 
 .info {
@@ -355,7 +395,7 @@ h2 {
   align-items: flex-end;
   min-height: 200px;
   max-height: 200px;
-  width: 50%;
+  width: 10%;
   overflow: hidden;
 }
 
@@ -366,5 +406,15 @@ h2 {
 }
 form {
   background-color: #dbe9e9;
+}
+.extra-cups > img {
+  width: 100px;
+  height: 100px;
+}
+h3 {
+  font-size: 2rem;
+}
+h1 {
+  font-size: 3rem;
 }
 </style>
