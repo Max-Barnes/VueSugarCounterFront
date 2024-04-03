@@ -6,16 +6,25 @@
       </div>
       <div class="searchbox">
         <div class="search">
-          <input type="text" placeholder="Search the sugar database!" />
+          <input
+            type="text"
+            placeholder="Type in your food and hit enter!"
+            v-model="searchBox"
+            @keyup.enter="searchForItems(this.searchBox)"
+          />
         </div>
       </div>
       <div class="searchitems">
-        <div class="item" v-for="each in searchItems" :key="each.id">
+        <div
+          class="item"
+          v-for="each in searchItems"
+          :key="each.id"
+          @click="saveNewSearchItem(each.id)"
+        >
           <div class="iteminfo">
             <div class="name">{{ each.name }}</div>
-            <div class="sugar">{{ each.sugar }}g of sugar</div>
+            <div class="sugar">{{ each.sugarContent }}g of sugar</div>
           </div>
-          <div class="addbutton">+</div>
         </div>
       </div>
       <div class="section-two">
@@ -99,19 +108,23 @@
           (30g)
         </h1>
         <div>
-          <h1>
-            This would be equivalent to {{ numberOfCubes }} sugar cubes/packets
-          </h1>
+          <h1>This would be equivalent to {{ numberOfCubes }} sugar cubes/packets</h1>
           <div class="cubes">
-            <img :key="index" src="../../assets/img/cube.png" alt="sugar-cube" v-for="index in Math.floor(numberOfCubes)">
+            <img
+              :key="index"
+              src="../../assets/img/cube.png"
+              alt="sugar-cube"
+              v-for="index in Math.floor(numberOfCubes)"
+            />
           </div>
-
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import ListService from '../../Services/ListService'
+
 export default {
   data() {
     return {
@@ -119,43 +132,19 @@ export default {
       listOfItems: [
         {
           id: 0,
-          name: 'Mcdonalds Milkshake WOO',
+          name: 'Example Item',
           sugar: 1
-        },
-        {
-          id: 1,
-          name: 'squeeeeeeeeeee',
-          sugar: 10
         }
       ],
-      searchItems: [
-        {
-          id: 0,
-          name: 'foo',
-          sugar: 0
-        }
-      ],
+      searchItems: [],
       newItem: [
         {
           name: '',
           sugar: 0
         }
       ],
-      nextListId: 2,
+      nextListId: 1,
       maxScrollValue: 160,
-      funnyStuff: [
-        {
-          id: 1,
-          name: 'Car',
-          sugar: 100000
-        },
-        {
-          id: 2,
-          name: 'Sugar Cube',
-          sugar: 4
-        }
-      ],
-      sugarInCar: 100000,
       sugarInCube: 4
     }
   },
@@ -229,6 +218,28 @@ export default {
     },
     removeAllItems() {
       this.listOfItems = []
+    },
+    searchForItems(search) {
+      this.searchItems = []
+
+      ListService.searchForItems(search).then((response) => {
+        this.searchItems = response.data
+      })
+    },
+    saveNewSearchItem(id) {
+      let food = this.searchItems.find((item) => item.id === id)
+
+      let newFood = {
+        id: 0,
+        name: '',
+        sugar: 0
+      }
+
+      newFood.name = food.name
+      newFood.sugar = food.sugarContent
+      newFood.id = this.getNextListId()
+
+      this.listOfItems.unshift(newFood)
     }
   }
 }
@@ -327,18 +338,23 @@ body {
   border-radius: 4px;
   min-height: 400px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   border-right: 1px solid #808080;
   overflow-y: scroll;
   max-height: 400px;
+  font-size: 1.33rem;
 }
 
 .item {
   display: flex;
-  justify-content: space-around;
-  align-items: center;
+  align-items: flex-start;
   border: 1px solid #808080;
   max-height: 100px;
+  cursor: pointer;
+}
+
+.item:hover {
+  background-color: rgba(42, 233, 42, 0.884);
 }
 
 .info {
@@ -425,5 +441,8 @@ h1 {
   width: 100px;
   margin-left: 20px;
   margin-right: 20px;
+}
+.sugar {
+  font-weight: 700;
 }
 </style>
