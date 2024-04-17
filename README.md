@@ -1,6 +1,6 @@
 # SugarFront
 
-This template should help get you started developing with Vue 3 in Vite.
+In today's health-conscious world, keeping track of sugar intake is crucial. That's why I developed the Sugar Counter – a user-friendly tool designed to help individuals understand visually, how much sugar is actually in their favorite food items. The database includes data from, Subway, McDonalds, Starbucks and more!
 
 ## Recommended IDE Setup
 
