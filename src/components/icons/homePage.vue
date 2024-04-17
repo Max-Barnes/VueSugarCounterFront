@@ -249,6 +249,7 @@ export default {
 body {
   background-color: #008080;
 }
+
 .container {
   margin-left: 2%;
   width: fit-content;
