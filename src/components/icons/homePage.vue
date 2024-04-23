@@ -79,7 +79,7 @@
     </div>
     <div class="information-area">
       <div class="total">
-        <h1>Total Sugar From Item of List</h1>
+        <h1>Total Sugar From Items In List</h1>
         <h3>{{ totalSugars }}g of sugar is equal to: {{ howManyCups }}</h3>
         <div id="cup-with-pointer">
           <div class="visual-aid">
