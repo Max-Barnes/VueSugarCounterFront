@@ -317,6 +317,7 @@ body {
   min-width: 125px;
   max-width: 125px;
   margin: auto;
+  text-wrap:wrap;
 }
 
 .row-template:nth-child(odd) {
@@ -445,5 +446,36 @@ h1 {
 }
 .sugar {
   font-weight: 700;
+}
+
+@media only screen and (max-width: 600px) {
+
+  .body-bag {
+    display: flex;
+    flex-wrap: wrap;
+    width:fit-content;
+    max-width: 100%;
+  }
+
+  .container {
+    width: auto;
+    max-width: 100%;
+    overflow:hidden;
+  }
+
+  .information-area {
+    margin-top: 20px;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+  }
+
+  #cup-with-pointer {
+    flex-wrap: wrap;
+    max-height: fit-content;
+  }
+
+
+ 
 }
 </style>
