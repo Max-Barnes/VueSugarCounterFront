@@ -96,7 +96,7 @@
           <div class="extra-cups">
             <img
               :key="index"
-              src="../../assets/img/copa.png"
+              src="../../assets/img/Copa.png"
               alt="additional-cup"
               v-for="index in extraCups"
             />
