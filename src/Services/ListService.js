@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const http = axios.create({
-  baseURL: 'http://sugarcounter-production.up.railway.app'
+  baseURL: 'https://sugarcounter-production.up.railway.app'
 })
 
 export default {
